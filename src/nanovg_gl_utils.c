@@ -41,7 +41,13 @@
 #endif
 
 #if defined(NANOVG_GL2) || defined(NANOVG_GL3)
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #endif
 
 #include "nanovg_gl_utils.h"
