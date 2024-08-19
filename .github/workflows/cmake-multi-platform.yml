@@ -88,6 +88,6 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: build-artifacts-${{ matrix.os }}-${{ matrix.c_compiler }}
+        name: build-artifacts-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.arch }}
         path: ${{ env.build-output-dir }}
 
