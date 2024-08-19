@@ -58,10 +58,16 @@ jobs:
         brew update
         brew install glew
 
-    - name: Install dependencies on Windows
+    - name: Install vcpkg
       if: matrix.os == 'windows-latest'
       run: |
-        choco install glew
+        git clone https://github.com/microsoft/vcpkg.git
+        .\vcpkg\bootstrap-vcpkg.bat
+
+    - name: Install GLEW with vcpkg on Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        .\vcpkg\vcpkg install glew
 
     - name: Configure CMake
       run: |
@@ -69,6 +75,7 @@ jobs:
               -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
               -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
               -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+              -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake \
               -DNANOVG_BUILD_EXAMPLES=OFF \
               -DNANOVG_BUILD_GLES2=OFF \
               -DNANOVG_BUILD_GLES3=OFF \
@@ -76,4 +83,4 @@ jobs:
               -S ${{ github.workspace }}
 
     - name: Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} 
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
