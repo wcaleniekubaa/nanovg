@@ -85,3 +85,9 @@ jobs:
 
     - name: Build
       run: cmake --build ${{ env.build-output-dir }} --config ${{ matrix.build_type }}
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts-${{ matrix.os }}-${{ matrix.c_compiler }}
+        path: ${{ env.build-output-dir }}
+
