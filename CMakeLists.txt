@@ -5,8 +5,6 @@ SET(VERSION 0.1)
 INCLUDE(GNUInstallDirs)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
-ADD_COMPILE_OPTIONS(-Wall -Werror)
-ADD_LINK_OPTIONS(LINKER:--as-needed LINKER:--no-undefined LINKER:--no-allow-shlib-undefined)
 
 option(NANOVG_SHARED_LIBS "Build shared libraries" ON)
 option(NANOVG_STATIC_LIBS "Build static liraries" ON)
