@@ -10,10 +10,6 @@ IF (UNIX AND NOT APPLE)
   LINK_LIBRARIES(m)
 ENDIF()
 
-IF(WIN32)
-  ADD_COMPILE_DEFINITIONS(GLEW_STATIC=1)
-ENDIF()
-
 option(NANOVG_SHARED_LIBS "Build shared libraries" ON)
 option(NANOVG_STATIC_LIBS "Build static liraries" ON)
 option(NANOVG_BUILD_EXAMPLES "Build examples" ON)
