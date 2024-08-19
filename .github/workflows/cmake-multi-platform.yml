@@ -44,7 +44,7 @@ jobs:
       id: strings
       shell: bash
       run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_ENV"
 
     - name: Install dependencies on Ubuntu
       if: matrix.os == 'ubuntu-latest'
@@ -72,21 +72,21 @@ jobs:
     - name: Configure CMake for Windows
       if: matrix.os == 'windows-latest'
       run: |
-        cmake -B ${{ steps.strings.outputs.build-output-dir }} \
-              -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
-              -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
-              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-              -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake \
-              -DNANOVG_BUILD_EXAMPLES=OFF \
-              -DNANOVG_BUILD_GLES2=OFF \
-              -DNANOVG_BUILD_GLES3=OFF \
-              -DNANOVG_STATIC_LIBS=OFF \
+        cmake -B ${{ env.build-output-dir }} ^
+              -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ^
+              -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} ^
+              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} ^
+              -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake ^
+              -DNANOVG_BUILD_EXAMPLES=OFF ^
+              -DNANOVG_BUILD_GLES2=OFF ^
+              -DNANOVG_BUILD_GLES3=OFF ^
+              -DNANOVG_STATIC_LIBS=OFF ^
               -S ${{ github.workspace }}
 
     - name: Configure CMake for Ubuntu and macOS
       if: matrix.os != 'windows-latest'
       run: |
-        cmake -B ${{ steps.strings.outputs.build-output-dir }} \
+        cmake -B ${{ env.build-output-dir }} \
               -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
               -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
               -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
@@ -97,4 +97,4 @@ jobs:
               -S ${{ github.workspace }}
 
     - name: Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      run: cmake --build ${{ env.build-output-dir }} --config ${{ matrix.build_type }}
