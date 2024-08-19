@@ -36,6 +36,8 @@ jobs:
             c_compiler: cl
           - os: macos-latest
             arch: x86
+          - os: macos-latest
+            arch: arm64
 
     steps:
     - uses: actions/checkout@v4
@@ -85,6 +87,7 @@ jobs:
               -DNANOVG_BUILD_GLES2=OFF \
               -DNANOVG_BUILD_GLES3=OFF \
               -DNANOVG_STATIC_LIBS=OFF \
+              -DCMAKE_OSX_ARCHITECTURES=x86_64 \
               -S ${{ github.workspace }}
 
     - name: Build
