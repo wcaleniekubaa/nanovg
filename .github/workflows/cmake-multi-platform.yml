@@ -58,7 +58,7 @@ jobs:
         brew update
         brew install glew
 
-    - name: Install vcpkg
+    - name: Install vcpkg on Windows
       if: matrix.os == 'windows-latest'
       run: |
         git clone https://github.com/microsoft/vcpkg.git
@@ -71,16 +71,28 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cmake -B ${{ steps.strings.outputs.build-output-dir }} \
-              -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
-              -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
-              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-              -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake \
-              -DNANOVG_BUILD_EXAMPLES=OFF \
-              -DNANOVG_BUILD_GLES2=OFF \
-              -DNANOVG_BUILD_GLES3=OFF \
-              -DNANOVG_STATIC_LIBS=OFF \
-              -S ${{ github.workspace }}
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then \
+          cmake -B ${{ steps.strings.outputs.build-output-dir }} \
+                -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
+                -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake \
+                -DNANOVG_BUILD_EXAMPLES=OFF \
+                -DNANOVG_BUILD_GLES2=OFF \
+                -DNANOVG_BUILD_GLES3=OFF \
+                -DNANOVG_STATIC_LIBS=OFF \
+                -S ${{ github.workspace }}; \
+        else \
+          cmake -B ${{ steps.strings.outputs.build-output-dir }} \
+                -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
+                -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                -DNANOVG_BUILD_EXAMPLES=OFF \
+                -DNANOVG_BUILD_GLES2=OFF \
+                -DNANOVG_BUILD_GLES3=OFF \
+                -DNANOVG_STATIC_LIBS=OFF \
+                -S ${{ github.workspace }}; \
+        fi
 
     - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
